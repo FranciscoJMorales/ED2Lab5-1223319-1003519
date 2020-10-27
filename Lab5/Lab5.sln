@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api", "api\api.csproj", "{2608F8D8-FD34-480E-83DA-62BDFBEEF892}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encryptors", "Encryptors\Encryptors.csproj", "{7AF93D28-C5DB-4C54-B4EE-90DD9A7D49DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEncryptors", "TestEncryptors\TestEncryptors.csproj", "{79D789F1-7509-4AD0-B206-BE9861FC3C85}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2608F8D8-FD34-480E-83DA-62BDFBEEF892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2608F8D8-FD34-480E-83DA-62BDFBEEF892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2608F8D8-FD34-480E-83DA-62BDFBEEF892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2608F8D8-FD34-480E-83DA-62BDFBEEF892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AF93D28-C5DB-4C54-B4EE-90DD9A7D49DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AF93D28-C5DB-4C54-B4EE-90DD9A7D49DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AF93D28-C5DB-4C54-B4EE-90DD9A7D49DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AF93D28-C5DB-4C54-B4EE-90DD9A7D49DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79D789F1-7509-4AD0-B206-BE9861FC3C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79D789F1-7509-4AD0-B206-BE9861FC3C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79D789F1-7509-4AD0-B206-BE9861FC3C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79D789F1-7509-4AD0-B206-BE9861FC3C85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7E367EF8-13E9-4049-8AFB-EE454D91E640}
+	EndGlobalSection
+EndGlobal
