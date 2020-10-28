@@ -24,7 +24,7 @@ namespace api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return null;
+            return NoContent();
         }
 
         [HttpPost]
@@ -33,57 +33,63 @@ namespace api.Controllers
         {
             try
             {
-                string path = env.ContentRootPath + "\\" + file.FileName;
-                using var saver = new FileStream(path, FileMode.Create);
-                file.CopyTo(saver);
-                saver.Close();
-                using var fileWritten = new FileStream(path, FileMode.OpenOrCreate);
-                using var reader = new BinaryReader(fileWritten);
-                byte[] buffer = new byte[0];
-                while (fileWritten.Position < fileWritten.Length)
+                string type = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+                if (type == ".txt")
                 {
-                    int index = buffer.Length;
-                    Array.Resize<byte>(ref buffer, index + 100000);
-                    byte[] aux = reader.ReadBytes(100000);
-                    aux.CopyTo(buffer, index);
-                }
-                reader.Close();
-                fileWritten.Close();
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    if (buffer[i] == 0)
+                    string path = env.ContentRootPath + "\\" + file.FileName;
+                    using var saver = new FileStream(path, FileMode.Create);
+                    file.CopyTo(saver);
+                    saver.Close();
+                    using var fileWritten = new FileStream(path, FileMode.OpenOrCreate);
+                    using var reader = new BinaryReader(fileWritten);
+                    byte[] buffer = new byte[0];
+                    while (fileWritten.Position < fileWritten.Length)
                     {
-                        Array.Resize<byte>(ref buffer, i);
-                        break;
+                        int index = buffer.Length;
+                        Array.Resize<byte>(ref buffer, index + 100000);
+                        byte[] aux = reader.ReadBytes(100000);
+                        aux.CopyTo(buffer, index);
                     }
-                }
-                if (buffer.Length > 0)
-                {
-                    IEncryptor encryptor;
-                    FileStream fileStream;
-                    switch (method)
+                    reader.Close();
+                    fileWritten.Close();
+                    for (int i = 0; i < buffer.Length; i++)
                     {
-                        case "cesar":
-                            encryptor = new CesarEncryptor(env.ContentRootPath);
-                            path = encryptor.Cipher(buffer, key, file.FileName);
-                            fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                            return File(fileStream, "text/plain");
-                        case "zigzag":
-                            encryptor = new ZigZagEncryptor(env.ContentRootPath);
-                            path = encryptor.Cipher(buffer, key, file.FileName);
-                            fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                            return File(fileStream, "text/plain");
-                        case "ruta":
-                            encryptor = new RouteEncryptor(env.ContentRootPath);
-                            path = encryptor.Cipher(buffer, key, file.FileName);
-                            fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                            return File(fileStream, "text/plain");
-                        default:
-                            return StatusCode(500, "El método no es válido");
+                        if (buffer[i] == 0)
+                        {
+                            Array.Resize<byte>(ref buffer, i);
+                            break;
+                        }
                     }
+                    if (buffer.Length > 0)
+                    {
+                        IEncryptor encryptor;
+                        FileStream fileStream;
+                        switch (method)
+                        {
+                            case "cesar":
+                                encryptor = new CesarEncryptor(env.ContentRootPath);
+                                path = encryptor.Cipher(buffer, key, file.FileName);
+                                fileStream = new FileStream(path, FileMode.OpenOrCreate);
+                                return File(fileStream, "text/plain");
+                            case "zigzag":
+                                encryptor = new ZigZagEncryptor(env.ContentRootPath);
+                                path = encryptor.Cipher(buffer, key, file.FileName);
+                                fileStream = new FileStream(path, FileMode.OpenOrCreate);
+                                return File(fileStream, "text/plain");
+                            case "ruta":
+                                encryptor = new RouteEncryptor(env.ContentRootPath);
+                                path = encryptor.Cipher(buffer, key, file.FileName);
+                                fileStream = new FileStream(path, FileMode.OpenOrCreate);
+                                return File(fileStream, "text/plain");
+                            default:
+                                return StatusCode(500, "El método no es válido");
+                        }
+                    }
+                    else
+                        return StatusCode(500, "El archivo está vacío");
                 }
                 else
-                    return StatusCode(500, "El archivo está vacío");
+                    return StatusCode(500, "El archivo debe ser .txt");
             }
             catch
             {
@@ -97,58 +103,67 @@ namespace api.Controllers
         {
             try
             {
-                string path = env.ContentRootPath + "\\" + file.FileName;
-                using var saver = new FileStream(path, FileMode.Create);
-                file.CopyTo(saver);
-                saver.Close();
-                using var fileWritten = new FileStream(path, FileMode.OpenOrCreate);
-                using var reader = new BinaryReader(fileWritten);
-                byte[] buffer = new byte[0];
-                while (fileWritten.Position < fileWritten.Length)
+                string type = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+                if (type == ".csr" || type == ".zz" || type == ".rt")
                 {
-                    int index = buffer.Length;
-                    Array.Resize<byte>(ref buffer, index + 100000);
-                    byte[] aux = reader.ReadBytes(100000);
-                    aux.CopyTo(buffer, index);
-                }
-                reader.Close();
-                fileWritten.Close();
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    if (buffer[i] == 0)
+                    string path = env.ContentRootPath + "\\" + file.FileName;
+                    using var saver = new FileStream(path, FileMode.Create);
+                    file.CopyTo(saver);
+                    saver.Close();
+                    using var fileWritten = new FileStream(path, FileMode.OpenOrCreate);
+                    using var reader = new BinaryReader(fileWritten);
+                    byte[] buffer = new byte[0];
+                    while (fileWritten.Position < fileWritten.Length)
                     {
-                        Array.Resize<byte>(ref buffer, i);
-                        break;
+                        int index = buffer.Length;
+                        Array.Resize<byte>(ref buffer, index + 100000);
+                        byte[] aux = reader.ReadBytes(100000);
+                        aux.CopyTo(buffer, index);
                     }
-                }
-                if (buffer.Length > 0)
-                {
-                    string type = file.FileName.Substring(file.FileName.LastIndexOf('.'));
-                    IEncryptor encryptor;
-                    FileStream fileStream;
-                    switch (type)
+                    reader.Close();
+                    fileWritten.Close();
+                    for (int i = 0; i < buffer.Length; i++)
                     {
-                        case ".csr":
-                            encryptor = new CesarEncryptor(env.ContentRootPath);
-                            path = encryptor.Decipher(buffer, key, file.FileName);
-                            fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                            return File(fileStream, "text/plain");
-                        case ".zz":
-                            encryptor = new ZigZagEncryptor(env.ContentRootPath);
-                            path = encryptor.Decipher(buffer, key, file.FileName);
-                            fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                            return File(fileStream, "text/plain");
-                        case ".rt":
-                            encryptor = new RouteEncryptor(env.ContentRootPath);
-                            path = encryptor.Decipher(buffer, key, file.FileName);
-                            fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                            return File(fileStream, "text/plain");
-                        default:
-                            return StatusCode(500, "El archivo no es de un tipo válido");
+                        if (buffer[i] == 0)
+                        {
+                            Array.Resize<byte>(ref buffer, i);
+                            break;
+                        }
                     }
+                    if (buffer.Length > 0)
+                    {
+                        IEncryptor encryptor;
+                        path = "";
+                        switch (type)
+                        {
+                            case ".csr":
+                                encryptor = new CesarEncryptor(env.ContentRootPath);
+                                path = encryptor.Decipher(buffer, key, file.FileName);
+                                break;
+                            case ".zz":
+                                encryptor = new ZigZagEncryptor(env.ContentRootPath);
+                                path = encryptor.Decipher(buffer, key, file.FileName);
+                                break;
+                            case ".rt":
+                                encryptor = new RouteEncryptor(env.ContentRootPath);
+                                path = encryptor.Decipher(buffer, key, file.FileName);
+                                break;
+                            default:
+                                return StatusCode(500, "El archivo no es de un tipo válido");
+                        }
+                        if (path != "")
+                        {
+                            FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
+                            return File(fileStream, "text/plain");
+                        }
+                        else
+                            return StatusCode(500, "La llave no es valida\r\nLlaves validas:\r\nCifrado Cesar: Solo puede tener letras del abecedario\r\nCifrado ZigZag: n (n = Número mayor a 0)\r\nCifrado de Ruta: tipo:nXm (tipo = vertical, espiral; n = filas mayor a 0; m = columnas mayor a 0)");
+                    }
+                    else
+                        return StatusCode(500, "El archivo está vacío");
                 }
                 else
-                    return StatusCode(500, "El archivo está vacío");
+                    return StatusCode(500, "El archivo no es de un tipo válido");
             }
             catch
             {
