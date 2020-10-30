@@ -60,7 +60,116 @@ namespace Encryptors
 
         private string EspiralCipher(string text, int rows, int columns)
         {
-            return text;
+            char lastChar = '$';
+            if (text.EndsWith('$'))
+                lastChar = '|';
+            while (text.Length % (rows * columns) > 0)
+            {
+                text += lastChar;
+            }
+            List<char[,]> list = new List<char[,]>();
+            int pos = 0;
+            while (text.Length > 0)
+            {
+                int direction = 0;
+                int i = 0;
+                int j = 0;
+                list.Add(new char[rows, columns]);
+                while (!IsFull(list[pos]))
+                {
+                    if (list[pos][i, j] == '\0')
+                    {
+                        list[pos][i, j] = text[0];
+                        text = text.Remove(0, 1);
+                    }
+                    switch (direction)
+                    {
+                        case 0:
+                            j++;
+                            if (j == columns)
+                            {
+                                j--;
+                                direction++;
+                            }
+                            else if (list[pos][i, j] != '\0')
+                            {
+                                j--;
+                                direction++;
+                            }
+                            break;
+                        case 1:
+                            i++;
+                            if (i == rows)
+                            {
+                                i--;
+                                direction++;
+                            }
+                            else if (list[pos][i, j] != '\0')
+                            {
+                                i--;
+                                direction++;
+                            }
+                            break;
+                        case 2:
+                            j--;
+                            if (j < 0)
+                            {
+                                j++;
+                                direction++;
+                            }
+                            else if (list[pos][i, j] != '\0')
+                            {
+                                j++;
+                                direction++;
+                            }
+                            break;
+                        case 3:
+                            i--;
+                            if (i < 0)
+                            {
+                                i++;
+                                direction = 0;
+                            }
+                            else if (list[pos][i, j] != '\0')
+                            {
+                                i++;
+                                direction = 0;
+                            }
+                            break;
+                    }
+                }
+                pos++;
+            }
+            string final = "";
+            foreach (var item in list)
+            {
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < columns; j++)
+                        final += item[i, j];
+                }
+            }
+            return final;
+        }
+
+        private bool IsFull(char[,] array)
+        {
+            foreach (var item in array)
+            {
+                if (item == '\0')
+                    return false;
+            }
+            return true;
+        }
+
+        private bool IsEmpty(char[,] array)
+        {
+            foreach (var item in array)
+            {
+                if (item != '\0')
+                    return false;
+            }
+            return true;
         }
 
         public string Cipher(byte[] content, string key, string name)
@@ -142,7 +251,101 @@ namespace Encryptors
 
         private string EspiralDecipher(string text, int rows, int columns)
         {
-            return text;
+            char lastChar = '$';
+            if (text.Contains('|'))
+                lastChar = '|';
+            while (text.Length % (rows * columns) > 0)
+            {
+                text += lastChar;
+            }
+            List<char[,]> list = new List<char[,]>();
+            int pos = 0;
+            while (text.Length > 0)
+            {
+                list.Add(new char[rows, columns]);
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < columns; j++)
+                    {
+                        list[pos][i, j] = text[0];
+                        text = text.Remove(0, 1);
+                    }
+                }
+                pos++;
+            }
+            string final = "";
+            foreach (var item in list)
+            {
+                int direction = 0;
+                int i = 0;
+                int j = 0;
+                while (!IsEmpty(item))
+                {
+                    if (item[i, j] != '\0')
+                    {
+                        final += item[i, j];
+                        item[i, j] = '\0';
+                    }
+                    switch (direction)
+                    {
+                        case 0:
+                            j++;
+                            if (j == columns)
+                            {
+                                j--;
+                                direction++;
+                            }
+                            else if (item[i, j] == '\0')
+                            {
+                                j--;
+                                direction++;
+                            }
+                            break;
+                        case 1:
+                            i++;
+                            if (i == rows)
+                            {
+                                i--;
+                                direction++;
+                            }
+                            else if (item[i, j] == '\0')
+                            {
+                                i--;
+                                direction++;
+                            }
+                            break;
+                        case 2:
+                            j--;
+                            if (j < 0)
+                            {
+                                j++;
+                                direction++;
+                            }
+                            else if (item[i, j] == '\0')
+                            {
+                                j++;
+                                direction++;
+                            }
+                            break;
+                        case 3:
+                            i--;
+                            if (i < 0)
+                            {
+                                i++;
+                                direction = 0;
+                            }
+                            else if (item[i, j] == '\0')
+                            {
+                                i++;
+                                direction = 0;
+                            }
+                            break;
+                    }
+                }
+            }
+            while (final.EndsWith(lastChar))
+                final = final.Remove(final.Length - 1);
+            return final;
         }
 
         public string Decipher(byte[] content, string key, string name)
