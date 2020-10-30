@@ -16,7 +16,55 @@ namespace Encryptors
 
         public string ShowCipher(string text, int rows)
         {
-            return text;
+            if (rows == 1)
+                return text;
+            else
+            {
+                char lastChar = '$';
+                if (text.EndsWith('$'))
+                    lastChar = '|';
+                while (text.Length % (2 * (rows - 1)) > 0)
+                {
+                    text += lastChar;
+                }
+                List<char>[] list = new List<char>[rows];
+                for (int j = 0; j < list.Length; j++)
+                    list[j] = new List<char>();
+                int i = 0;
+                bool direction = true;
+                while (text.Length > 0)
+                {
+                    list[i].Add(text[0]);
+                    text = text.Remove(0, 1);
+                    if (direction)
+                    {
+                        if (i == rows - 1)
+                        {
+                            i--;
+                            direction = false;
+                        }
+                        else
+                            i++;
+                    }
+                    else
+                    {
+                        if (i == 0)
+                        {
+                            i++;
+                            direction = true;
+                        }
+                        else
+                            i--;
+                    }
+                }
+                string final = "";
+                foreach (var item2 in list)
+                {
+                    foreach (var item in item2)
+                        final += item;
+                }
+                return final;
+            }
         }
 
         public string Cipher(byte[] content, string key, string name)
