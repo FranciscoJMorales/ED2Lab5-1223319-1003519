@@ -19,25 +19,24 @@ namespace TestEncryptors
                 int x = int.Parse(Console.ReadLine());
                 Console.WriteLine("Ingrese el número de columnas para el cifrado de Ruta:");
                 int y = int.Parse(Console.ReadLine());
-                Console.WriteLine("Ingrese el método para el cifrado de Ruta: 1 -> Vertical, 2 -> Espiral");
-                int method = int.Parse(Console.ReadLine());
-                bool vertical = true;
-                if (method == 2)
-                    vertical = false;
-                else if (method != 1)
-                {
-                    Console.WriteLine("Ha ocurrido un error.");
-                    Main(args);
-                }
                 var cesar = new CesarEncryptor("..//..//..");
                 Console.WriteLine("Cifrado César:");
                 Console.WriteLine(cesar.ShowCipher(text, key));
+                Console.WriteLine(cesar.ShowDecipher(cesar.ShowCipher(text, key), key));
+                Console.WriteLine();
                 var zigzag = new ZigZagEncryptor("..//..//..");
                 Console.WriteLine("Cifrado ZigZag:");
                 Console.WriteLine(zigzag.ShowCipher(text, rows));
+                Console.WriteLine(zigzag.ShowDecipher(zigzag.ShowCipher(text, rows), rows));
+                Console.WriteLine();
                 var route = new RouteEncryptor("..//..//..");
-                Console.WriteLine("Cifrado de Ruta:");
-                Console.WriteLine(route.ShowCipher(text, x, y, vertical));
+                Console.WriteLine("Cifrado de Ruta vertical:");
+                Console.WriteLine(route.ShowCipher(text, x, y, true));
+                Console.WriteLine(route.ShowDecipher(route.ShowCipher(text, x, y, true), x, y, true));
+                Console.WriteLine();
+                Console.WriteLine("Cifrado de Ruta espiral:");
+                Console.WriteLine(route.ShowCipher(text, x, y, false));
+                Console.WriteLine(route.ShowDecipher(route.ShowCipher(text, x, y, false), x, y, false));
                 Console.ReadKey();
             }
             catch

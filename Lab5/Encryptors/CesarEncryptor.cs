@@ -21,10 +21,10 @@ namespace Encryptors
 
         public string Cipher(byte[] content, string key, string name)
         {
-            if (KeyIsValid(key))
+            if (KeyIsValid(key.ToUpper()))
             {
                 string text = ConvertToString(content);
-                string final = ShowCipher(text, key);
+                string final = ShowCipher(text, key.ToUpper());
                 string path = Path + "\\" + name.Remove(name.LastIndexOf('.')) + ".csr";
                 using var file = new FileStream(path, FileMode.Create);
                 file.Write(ConvertToByteArray(final), 0, final.Length);
@@ -65,7 +65,7 @@ namespace Encryptors
         private bool KeyIsValid(string key)
         {
             List<char> alphabet = new List<char>();
-            for (int i = 97; i < 26; i++)
+            for (int i = 65; i < 91; i++)
                 alphabet.Add(Convert.ToChar(i));
             foreach (var item in key)
             {

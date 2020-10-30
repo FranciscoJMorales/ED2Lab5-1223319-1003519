@@ -16,6 +16,50 @@ namespace Encryptors
 
         public string ShowCipher(string text, int rows, int columns, bool vertical)
         {
+            if (vertical)
+                return VerticalCipher(text, rows, columns);
+            else
+                return EspiralCipher(text, rows, columns);
+        }
+
+        private string VerticalCipher(string text, int rows, int columns)
+        {
+            char lastChar = '$';
+            if (text.EndsWith('$'))
+                lastChar = '|';
+            while (text.Length % (rows * columns) > 0)
+            {
+                text += lastChar;
+            }
+            List<char[,]> list = new List<char[,]>();
+            int pos = 0;
+            while (text.Length > 0)
+            {
+                list.Add(new char[rows, columns]);
+                for (int i = 0; i < columns; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                    {
+                        list[pos][j, i] = text[0];
+                        text = text.Remove(0, 1);
+                    }
+                }
+                pos++;
+            }
+            string final = "";
+            foreach(var item in list)
+            {
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < columns; j++)
+                        final += item[i, j];
+                }
+            }
+            return final;
+        }
+
+        private string EspiralCipher(string text, int rows, int columns)
+        {
             return text;
         }
 
@@ -51,6 +95,52 @@ namespace Encryptors
         }
 
         public string ShowDecipher(string text, int rows, int columns, bool vertical)
+        {
+            if (vertical)
+                return VerticalDecipher(text, rows, columns);
+            else
+                return EspiralDecipher(text, rows, columns);
+        }
+
+        private string VerticalDecipher(string text, int rows, int columns)
+        {
+            char lastChar = '$';
+            if (text.EndsWith('|'))
+                lastChar = '|';
+            while (text.Length % (rows * columns) > 0)
+            {
+                text += lastChar;
+            }
+            List<char[,]> list = new List<char[,]>();
+            int pos = 0;
+            while (text.Length > 0)
+            {
+                list.Add(new char[rows, columns]);
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < columns; j++)
+                    {
+                        list[pos][i, j] = text[0];
+                        text = text.Remove(0, 1);
+                    }
+                }
+                pos++;
+            }
+            string final = "";
+            foreach (var item in list)
+            {
+                for (int i = 0; i < columns; i++)
+                {
+                    for (int j = 0; j < rows; j++)
+                        final += item[j, i];
+                }
+            }
+            while (final.EndsWith(lastChar))
+                final = final.Remove(final.Length - 1);
+            return final;
+        }
+
+        private string EspiralDecipher(string text, int rows, int columns)
         {
             return text;
         }
