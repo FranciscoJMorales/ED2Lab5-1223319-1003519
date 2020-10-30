@@ -92,7 +92,64 @@ namespace Encryptors
 
         public string ShowDecipher(string text, int rows)
         {
-            return text;
+            if (rows == 1)
+                return text;
+            else
+            {
+                char lastChar = '$';
+                if (text.Contains('|'))
+                    lastChar = '|';
+                while (text.Length % (2 * (rows - 1)) > 0)
+                {
+                    text += lastChar;
+                }
+                int cycles = text.Length / (2 * (rows - 1));
+                int length = text.Length;
+                List<char>[] list = new List<char>[rows];
+                for (int j = 0; j < list.Length; j++)
+                {
+                    list[j] = new List<char>();
+                    int times = 1;
+                    if (j > 0 && j < rows - 1)
+                        times++;
+                    for (int k = 0; k < (cycles * times); k++)
+                    {
+                        list[j].Add(text[0]);
+                        text = text.Remove(0, 1);
+                    }
+                }
+                string final = "";
+                int i = 0;
+                bool direction = true;
+                while (final.Length < length)
+                {
+                    final += list[i][0];
+                    list[i].RemoveAt(0);
+                    if (direction)
+                    {
+                        if (i == rows - 1)
+                        {
+                            i--;
+                            direction = false;
+                        }
+                        else
+                            i++;
+                    }
+                    else
+                    {
+                        if (i == 0)
+                        {
+                            i++;
+                            direction = true;
+                        }
+                        else
+                            i--;
+                    }
+                }
+                while (final.EndsWith(lastChar))
+                    final = final.Remove(final.Length - 1);
+                return final;
+            }
         }
 
         public string Decipher(byte[] content, string key, string name)

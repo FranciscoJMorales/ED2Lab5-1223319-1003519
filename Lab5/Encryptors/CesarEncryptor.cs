@@ -41,10 +41,10 @@ namespace Encryptors
 
         public string Decipher(byte[] content, string key, string name)
         {
-            if (KeyIsValid(key))
+            if (KeyIsValid(key.ToUpper()))
             {
                 string text = ConvertToString(content);
-                string final = ShowDecipher(text, key);
+                string final = ShowDecipher(text, key.ToUpper());
                 string path = Path + "\\" + name.Remove(name.LastIndexOf('.')) + ".txt";
                 using var file = new FileStream(path, FileMode.Create);
                 file.Write(ConvertToByteArray(final), 0, final.Length);
@@ -64,15 +64,21 @@ namespace Encryptors
 
         private bool KeyIsValid(string key)
         {
-            List<char> alphabet = new List<char>();
-            for (int i = 65; i < 91; i++)
-                alphabet.Add(Convert.ToChar(i));
+            List<char> alphabet = Alphabet();
             foreach (var item in key)
             {
                 if (!alphabet.Contains(item))
                     return false;
             }
             return true;
+        }
+
+        private List<char> Alphabet()
+        {
+            List<char> alphabet = new List<char>();
+            for (int i = 65; i < 91; i++)
+                alphabet.Add(Convert.ToChar(i));
+            return alphabet;
         }
 
         private byte[] ConvertToByteArray(string text)

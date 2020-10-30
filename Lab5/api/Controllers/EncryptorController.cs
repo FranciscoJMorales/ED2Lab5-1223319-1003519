@@ -63,27 +63,31 @@ namespace api.Controllers
                     if (buffer.Length > 0)
                     {
                         IEncryptor encryptor;
-                        FileStream fileStream;
+                        path = "";
                         switch (method)
                         {
                             case "cesar":
                                 encryptor = new CesarEncryptor(env.ContentRootPath);
                                 path = encryptor.Cipher(buffer, key, file.FileName);
-                                fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                                return File(fileStream, "text/plain");
+                                break;
                             case "zigzag":
                                 encryptor = new ZigZagEncryptor(env.ContentRootPath);
                                 path = encryptor.Cipher(buffer, key, file.FileName);
-                                fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                                return File(fileStream, "text/plain");
+                                break;
                             case "ruta":
                                 encryptor = new RouteEncryptor(env.ContentRootPath);
                                 path = encryptor.Cipher(buffer, key, file.FileName);
-                                fileStream = new FileStream(path, FileMode.OpenOrCreate);
-                                return File(fileStream, "text/plain");
+                                break;
                             default:
                                 return StatusCode(500, "El método no es válido");
                         }
+                        if (path != "")
+                        {
+                            FileStream fileStream = new FileStream(path, FileMode.OpenOrCreate);
+                            return File(fileStream, "text/plain");
+                        }
+                        else
+                            return StatusCode(500, "La llave no es valida\r\nLlaves validas:\r\nCifrado Cesar: Solo puede tener letras del abecedario\r\nCifrado ZigZag: n (n = Número mayor a 0)\r\nCifrado de Ruta: tipo:nXm (tipo = vertical, espiral; n = filas mayor a 0; m = columnas mayor a 0)");
                     }
                     else
                         return StatusCode(500, "El archivo está vacío");
