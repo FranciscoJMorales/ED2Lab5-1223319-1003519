@@ -162,7 +162,8 @@ namespace Encryptors
             if (mayus)
             {
                 foreach (var item in key)
-                    alphabet.Add(item);
+                    if (!alphabet.Contains(item))
+                        alphabet.Add(item);
                
                 for (int i = 65; i < 91; i++)
                     if (!alphabet.Contains(Convert.ToChar(i)))
@@ -171,7 +172,8 @@ namespace Encryptors
             else {
 
                 foreach (var item in key)
-                  alphabet.Add(item);
+                    if (!alphabet.Contains(item))
+                        alphabet.Add(item);
 
                 for (int i = 97; i < 123; i++)
                     if (!alphabet.Contains(Convert.ToChar(i)))
