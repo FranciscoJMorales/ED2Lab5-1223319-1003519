@@ -16,7 +16,39 @@ namespace Encryptors
 
         public string ShowCipher(string text, string key)
         {
-            return text;
+            List<char> alphabetMayus = Alphabet(true);
+            List<char> alphabetMinus = Alphabet(false);
+            List<char> kalphabetMayus = Alphabet(key.ToUpper(),true);        
+            List<char> kalphabetMinus = Alphabet(key.ToLower(), false);
+            string final = "";
+          
+
+
+            foreach (var item in text)
+            {
+              
+                if (alphabetMayus.Contains(item))
+                {
+                    final += kalphabetMayus[alphabetMayus.IndexOf(item)];
+                }
+                else if(alphabetMinus.Contains(item))
+                {
+                    final += kalphabetMinus[alphabetMinus.IndexOf(item)];
+
+                }
+                else
+                {
+                    final += item;
+                }
+                                                      
+            }
+
+            alphabetMayus.Clear();
+            alphabetMinus.Clear();
+            kalphabetMayus.Clear();
+            kalphabetMinus.Clear();
+
+            return final;
         }
 
         public string Cipher(byte[] content, string key, string name)
@@ -36,7 +68,39 @@ namespace Encryptors
 
         public string ShowDecipher(string text, string key)
         {
-            return text;
+            List<char> alphabetMayus = Alphabet(true);
+            List<char> alphabetMinus = Alphabet(false);
+            List<char> kalphabetMayus = Alphabet(key.ToUpper(), true);
+            List<char> kalphabetMinus = Alphabet(key.ToLower(), false);
+            string final = "";
+
+
+
+            foreach (var item in text)
+            {
+
+                if (kalphabetMayus.Contains(item))
+                {
+                    final += alphabetMayus[kalphabetMayus.IndexOf(item)];
+                }
+                else if (kalphabetMinus.Contains(item))
+                {
+                    final += alphabetMinus[kalphabetMinus.IndexOf(item)];
+
+                }
+                else
+                {
+                    final += item;
+                }
+
+            }
+
+            alphabetMayus.Clear();
+            alphabetMinus.Clear();
+            kalphabetMayus.Clear();
+            kalphabetMinus.Clear();
+
+            return final;
         }
 
         public string Decipher(byte[] content, string key, string name)
@@ -64,7 +128,7 @@ namespace Encryptors
 
         private bool KeyIsValid(string key)
         {
-            List<char> alphabet = Alphabet();
+            List<char> alphabet = Alphabet(true);
             foreach (var item in key)
             {
                 if (!alphabet.Contains(item))
@@ -73,11 +137,50 @@ namespace Encryptors
             return true;
         }
 
-        private List<char> Alphabet()
+        private List<char> Alphabet(bool mayus)
         {
             List<char> alphabet = new List<char>();
-            for (int i = 65; i < 91; i++)
-                alphabet.Add(Convert.ToChar(i));
+            if (mayus)
+            {
+                for (int i = 65; i < 91; i++)
+                    alphabet.Add(Convert.ToChar(i));
+            }
+            else
+            {
+                for (int i = 97; i < 123; i++)
+                    alphabet.Add(Convert.ToChar(i));
+
+            }
+            
+
+            return alphabet;
+        }
+
+        private List<char> Alphabet(string key, bool mayus)
+        {
+            List<char> alphabet = new List<char>();
+            if (mayus)
+            {
+                foreach (var item in key)
+                    alphabet.Add(item);
+               
+                for (int i = 65; i < 91; i++)
+                    if (!alphabet.Contains(Convert.ToChar(i)))
+                        alphabet.Add(Convert.ToChar(i));                
+            }
+            else {
+
+                foreach (var item in key)
+                  alphabet.Add(item);
+
+                for (int i = 97; i < 123; i++)
+                    if (!alphabet.Contains(Convert.ToChar(i)))
+                        alphabet.Add(Convert.ToChar(i));
+            }
+            
+
+         
+
             return alphabet;
         }
 
