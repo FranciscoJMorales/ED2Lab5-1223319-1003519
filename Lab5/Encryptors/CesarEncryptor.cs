@@ -51,12 +51,12 @@ namespace Encryptors
             return final;
         }
 
-        public string Cipher(byte[] content, string key, string name)
+        public string Cipher(byte[] content, Key key, string name)
         {
-            if (KeyIsValid(key.ToUpper()))
+            if (KeyIsValid(key.Word.ToUpper()))
             {
                 string text = ConvertToString(content);
-                string final = ShowCipher(text, key.ToUpper());
+                string final = ShowCipher(text, key.Word.ToUpper());
                 string path = Path + "\\" + name.Remove(name.LastIndexOf('.')) + ".csr";
                 using var file = new FileStream(path, FileMode.Create);
                 file.Write(ConvertToByteArray(final), 0, final.Length);
@@ -103,12 +103,12 @@ namespace Encryptors
             return final;
         }
 
-        public string Decipher(byte[] content, string key, string name)
+        public string Decipher(byte[] content, Key key, string name)
         {
-            if (KeyIsValid(key.ToUpper()))
+            if (KeyIsValid(key.Word.ToUpper()))
             {
                 string text = ConvertToString(content);
-                string final = ShowDecipher(text, key.ToUpper());
+                string final = ShowDecipher(text, key.Word.ToUpper());
                 string path = Path + "\\" + name.Remove(name.LastIndexOf('.')) + ".txt";
                 using var file = new FileStream(path, FileMode.Create);
                 file.Write(ConvertToByteArray(final), 0, final.Length);

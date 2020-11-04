@@ -67,15 +67,14 @@ namespace Encryptors
             }
         }
 
-        public string Cipher(byte[] content, string key, string name)
+        public string Cipher(byte[] content, Key key, string name)
         {
             try
             {
-                int rows = int.Parse(key);
-                string text = ConvertToString(content);
-                if (rows > 0)
+                if (key.Levels > 0)
                 {
-                    string final = ShowCipher(text, int.Parse(key));
+                    string text = ConvertToString(content);
+                    string final = ShowCipher(text, key.Levels);
                     string path = Path + "\\" + name.Remove(name.LastIndexOf('.')) + ".zz";
                     using var file = new FileStream(path, FileMode.Create);
                     file.Write(ConvertToByteArray(final), 0, final.Length);
@@ -152,15 +151,14 @@ namespace Encryptors
             }
         }
 
-        public string Decipher(byte[] content, string key, string name)
+        public string Decipher(byte[] content, Key key, string name)
         {
             try
             {
-                int rows = int.Parse(key);
-                if (rows > 0)
+                if (key.Levels > 0)
                 {
                     string text = ConvertToString(content);
-                    string final = ShowDecipher(text, rows);
+                    string final = ShowDecipher(text, key.Levels);
                     string path = Path + "\\" + name.Remove(name.LastIndexOf('.')) + ".txt";
                     using var file = new FileStream(path, FileMode.Create);
                     file.Write(ConvertToByteArray(final), 0, final.Length);

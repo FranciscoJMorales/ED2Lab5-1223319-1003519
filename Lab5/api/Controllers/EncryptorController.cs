@@ -29,7 +29,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/api/cipher/{method}")]
-        public IActionResult Cipher([FromForm] IFormFile file, [FromForm] string key, string method)
+        public IActionResult Cipher([FromForm] IFormFile file, [FromForm] Key key, string method)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace api.Controllers
                             return File(fileStream, "text/plain");
                         }
                         else
-                            return StatusCode(500, "La llave no es valida\r\nLlaves validas:\r\nCifrado Cesar: Solo puede tener letras del abecedario\r\nCifrado ZigZag: n (n = Número mayor a 0)\r\nCifrado de Ruta: tipo:nXm (tipo = vertical, espiral; n = filas mayor a 0; m = columnas mayor a 0)");
+                            return StatusCode(500, "La llave no es valida");
                     }
                     else
                         return StatusCode(500, "El archivo está vacío");
@@ -103,7 +103,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/api/decipher")]
-        public IActionResult Decipher([FromForm] IFormFile file, [FromForm] string key)
+        public IActionResult Decipher([FromForm] IFormFile file, [FromForm] Key key)
         {
             try
             {
@@ -161,7 +161,7 @@ namespace api.Controllers
                             return File(fileStream, "text/plain");
                         }
                         else
-                            return StatusCode(500, "La llave no es valida\r\nLlaves validas:\r\nCifrado Cesar: Solo puede tener letras del abecedario\r\nCifrado ZigZag: n (n = Número mayor a 0)\r\nCifrado de Ruta: tipo:nXm (tipo = vertical, espiral; n = filas mayor a 0; m = columnas mayor a 0)");
+                            return StatusCode(500, "La llave no es valida");
                     }
                     else
                         return StatusCode(500, "El archivo está vacío");

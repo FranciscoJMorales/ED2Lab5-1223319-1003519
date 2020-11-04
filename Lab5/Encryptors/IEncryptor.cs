@@ -6,7 +6,7 @@ namespace Encryptors
 {
     public interface IEncryptor
     {
-        public abstract string Cipher(byte[] content, string key, string name);
-        public abstract string Decipher(byte[] content, string key, string name);
+        public abstract string Cipher(byte[] content, Key key, string name);
+        public abstract string Decipher(byte[] content, Key key, string name);
     }
 }
